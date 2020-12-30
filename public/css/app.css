@@ -9648,3 +9648,8 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
+
+#myCanva {
+  height: 320px;
+  width: 480px;
+}
