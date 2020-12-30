@@ -9650,6 +9650,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 #myCanva {
-  height: 320px;
-  width: 480px;
+  height: 80vh;
+  width: 50vw;
+  background-image: url(../img/72B9jm.jpg);
 }
