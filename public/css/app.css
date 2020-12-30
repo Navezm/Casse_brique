@@ -9650,7 +9650,8 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 #myCanva {
-  height: 80vh;
-  width: 50vw;
-  background-image: url(../img/72B9jm.jpg);
+  background-image: url(../img/bg_star.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }

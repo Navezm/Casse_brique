@@ -76,7 +76,8 @@ document.addEventListener("keyup", function(e){
 // Création de la balle
 let drawBall = () => {
     ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    // ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.arc(100, 75, 5, 0, Math.PI*2)
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.strokeStyle = "black";
