@@ -18,17 +18,18 @@ let leftPress = false;
 window.addEventListener("resize", function(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-})
+});
 
 let asteroid = document.getElementById("asteroid");
 
 // Création classe des astéroides
 class Asteroid {
-    constructor(x, y, width, height){
+    constructor(x, y, width, height, value){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.value = value;
     };
     drawAsteroid(){
         ctx.beginPath();
@@ -37,8 +38,9 @@ class Asteroid {
     };
 };
 
+let asteroidArray = [];
 for (let i = 0; i < 25; i++) {
-    var asteroidNew = new Asteroid()
+    asteroidArray.push(new Asteroid());
 }
 
 // Bouger le paddle
