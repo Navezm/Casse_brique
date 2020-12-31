@@ -248,14 +248,14 @@ let draw = () => {
     if (y + dy < ballRadius){
         dy = -dy;
     } else if (y + dy > canvas.height-ballRadius ){
-        dy = -dy;
-        // if(x > paddleX && x < paddleX + paddleWidth){
-        //     dy = (-dy - 0.2);
-        // } else {
-        //     alert("GAME OVER");
-        //     document.location.reload();
-        //     clearInterval(interval);
-        // };
+        // dy = -dy;
+        if(x > paddleX && x < paddleX + paddleWidth){
+            dy = (-dy - 0.2);
+        } else {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval);
+        };
     };
     // Axe X
     if (x + dx > canvas.width-ballRadius || x + dx < ballRadius){
