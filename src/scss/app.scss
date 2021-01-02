@@ -1,5 +1,10 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
+body{
+    margin: 0;
+    height: 100vh;
+}
+
 #myCanva{
     background-image: url(../img/bg_star.jpg);
     background-repeat: no-repeat;
