@@ -27,11 +27,10 @@ window.addEventListener("resize", function(){
 
 // Création classe des astéroides
 class Asteroid {
-    constructor(x, y, dx, dy, width, height, value){
+    constructor(x, y, dx, width, height, value){
         this.x = x;
         this.y = y;
         this.dx = dx;
-        this.dy = dy;
         this.width = width;
         this.height = height;
         this.value = value;
@@ -43,7 +42,6 @@ class Asteroid {
     };
 };
 
-// Variable aléatoire
 // window.addEventListener("mousemove", function(e){
 //     console.log(e);
 // });
@@ -52,10 +50,9 @@ class Asteroid {
 let asteroidArray = [];
 for (let i = 0; i < 100; i++) {
     let randomX = Math.random() * window.innerWidth;
-    let randomY = Math.floor(Math.random() * window.innerHeight) - 500;
+    let randomY = Math.floor(Math.random() * window.innerHeight) - (canvas.height/2);
     let randomDx = Math.floor((Math.random() * -0.5) * 2);
-    let randomDy = Math.floor((Math.random() * -0.5) * 2);
-    asteroidArray.push(new Asteroid(randomX, randomY, randomDx, randomDy, asteWidth, asteHeight, 1));
+    asteroidArray.push(new Asteroid(randomX, randomY, randomDx, asteWidth, asteHeight, 1));
 };
 
 
@@ -94,6 +91,18 @@ document.addEventListener("keyup", function(e){
     };
 });
 
+// Fonction de collision 
+let collisionDetection = () => {
+    for (let i = 0; i < asteroidArray.length; i++) {
+        let b = asteroidArray[i];
+        if (b.value == 1){
+            if(x > b.x && x < b.x + asteWidth && y > b.y && y < b.y + asteHeight){
+                dy = -dy;
+                b.value = 0;
+            };
+        }
+    };
+}
 
 // Fonction principale
 let draw = () => {
@@ -102,8 +111,11 @@ let draw = () => {
     drawBall();
     drawSpaceShip();
     for (let i = 0; i < asteroidArray.length; i++) {
-        asteroidArray[i].drawAsteroid();
+        if (asteroidArray[i].value == 1) {
+            asteroidArray[i].drawAsteroid();
+        }
     };
+    collisionDetection();
 
     // Rebond balle
     // Axe Y
@@ -140,6 +152,21 @@ let draw = () => {
     // Mouvement de la balle
     x += dx;
     y += dy;
+
+    // Mouvement asté
+    for (let i = 0; i < asteroidArray.length; i++) {
+        if(i % 2 == 0){
+            asteroidArray[i].x += asteroidArray[i].dx;
+            if(asteroidArray[i].x < 0 || asteroidArray[i].x > canvas.width - asteWidth){
+                asteroidArray[i].dx = -asteroidArray[i].dx;
+            }
+        } else {
+            asteroidArray[i].x += -asteroidArray[i].dx;
+            if(asteroidArray[i].x < 0 || asteroidArray[i].x > canvas.width - asteWidth){
+                asteroidArray[i].dx = -asteroidArray[i].dx;
+            }
+        }
+    };
 };
 
 let interval = setInterval(draw, 8.5);
