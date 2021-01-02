@@ -68,11 +68,17 @@ class Asteroid {
 // Création d'instance asteroid
 let asteroidArray = [];
 for (let i = 0; i < 30; i++) {
-    let randomX = Math.random() * window.innerWidth;
+    let randomX = Math.floor((Math.random() * window.innerWidth));
+    if (randomX <= 0 + asteWidth){
+        randomX += asteWidth;
+    } else if (randomX >= canvas.width-asteWidth){
+        randomX -= asteWidth;
+    };
     let randomY = Math.floor(Math.random() * window.innerHeight/2);
-    let randomDx = Math.floor((Math.random() - 0.5) * 3);
+    let randomDx = (Math.random() - 0.5) * 3;
     asteroidArray.push(new Asteroid(randomX, randomY, randomDx, asteWidth, asteHeight, 1));
 };
+
 
 // Création paddle
 let drawSpaceShip = () => {
@@ -125,14 +131,6 @@ let collisionDetection = () => {
                 dy = -dy;
                 b.value = 0;
                 score++;
-                if(score == asteroidArray.length){
-                    victory.classList.remove("d-none");
-                    victory.classList.add("d-flex");
-                    victory.addEventListener("click", function(){
-                        document.location.reload();
-                    });
-                    return
-                };
             };
         };
     };
@@ -222,12 +220,23 @@ let draw = () => {
                 asteroidArray[i].dx = -asteroidArray[i].dx;
             };
         } else {
-            asteroidArray[i].x += -asteroidArray[i].dx;
+            asteroidArray[i].x -= asteroidArray[i].dx;
             if(asteroidArray[i].x < 0 || asteroidArray[i].x > canvas.width - asteWidth){
                 asteroidArray[i].dx = -asteroidArray[i].dx;
             };
         };
     };
+
+    // Victoire
+    if(score == asteroidArray.length){
+        victory.classList.remove("d-none");
+        victory.classList.add("d-flex");
+        victory.addEventListener("click", function(){
+            document.location.reload();
+        });
+        return
+    };
+
     window.requestAnimationFrame(draw);
 };
 
