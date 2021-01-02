@@ -7,13 +7,29 @@
     <link rel="stylesheet" href="./public/css/app.css">
 </head>
 <body>
+    <!-- Start Game -->
+    <div id="start" class="d-flex justify-content-center align-items-center flex-column">
+        <h1 class="text-black">Start the game ?</h1>
+        <br>
+        <h1 class="text-danger">Click</h1>
+    </div>
+
+    <!-- Game over -->
+    <div id="gameOver" class="d-none justify-content-center align-items-center">
+        <h1 class="text-danger">GAME OVER</h1>
+    </div>
+
+    <!-- Victory -->
+    <div id="victory" class="d-none justify-content-center align-items-center">
+        <h1 class="text-black">VICTORY !</h1>
+    </div>
+
     <!-- Canvas -->
     <canvas id="myCanva">
-    
     </canvas>
 
     <!-- Stockage d'image -->
-    <img id="asteroid" class="d-none" src="./public/img/asteroid.png" alt="">
+    <img id="asteroid" class="d-none" src="./public/img/asteroid2.png" alt="">
     <img id="ufo" class="d-none" src="./public/img/UFO.png" alt="">
 
     <script src="./public/js/main.js"></script>

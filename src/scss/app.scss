@@ -3,6 +3,7 @@
 body{
     margin: 0;
     height: 100vh;
+    background-color: rgba(148, 148, 148, 0.5);
 }
 
 #myCanva{
@@ -10,4 +11,4 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-};
+}
