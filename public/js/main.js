@@ -5,8 +5,8 @@ canvas.height = window.innerHeight;
 let ctx = canvas.getContext("2d");
 let x = canvas.width/2;
 let y = canvas.height-15;
-let dx = 2;
-let dy = -4;
+let dx = 4;
+let dy = -6;
 let ballRadius = 10;
 let paddleHeight = 100;
 let paddleWidth = 150;
@@ -17,6 +17,29 @@ let rightPress = false;
 let leftPress = false;
 let asteroid = document.getElementById("asteroid");
 let ufo = document.getElementById("ufo");
+let score = 0;
+let live = 3;
+
+// Start div
+let startDiv = document.getElementById("start");
+startDiv.style.position = "absolute";
+startDiv.style.width = (window.innerWidth)+"px";
+startDiv.style.height = (window.innerHeight)+"px";
+startDiv.style.backgroundColor = "rgba(148, 148, 148, 0.5)";
+
+// Game Over div
+let gameOver = document.getElementById("gameOver");
+gameOver.style.position = "absolute";
+gameOver.style.width = (window.innerWidth)+"px";
+gameOver.style.height = (window.innerHeight)+"px";
+gameOver.style.backgroundColor = "rgba(148, 148, 148, 0.5)";
+
+// Victory div
+let victory = document.getElementById("victory");
+victory.style.position = "absolute";
+victory.style.width = (window.innerWidth)+"px";
+victory.style.height = (window.innerHeight)+"px";
+victory.style.backgroundColor = "rgba(148, 148, 148, 0.5)";
 
 // Responsivité du canvas
 window.addEventListener("resize", function(){
@@ -42,19 +65,14 @@ class Asteroid {
     };
 };
 
-// window.addEventListener("mousemove", function(e){
-//     console.log(e);
-// });
-
 // Création d'instance asteroid
 let asteroidArray = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 30; i++) {
     let randomX = Math.random() * window.innerWidth;
-    let randomY = Math.floor(Math.random() * window.innerHeight) - (canvas.height/2);
-    let randomDx = Math.floor((Math.random() * -0.5) * 2);
+    let randomY = Math.floor(Math.random() * window.innerHeight/2);
+    let randomDx = Math.floor((Math.random() - 0.5) * 3);
     asteroidArray.push(new Asteroid(randomX, randomY, randomDx, asteWidth, asteHeight, 1));
 };
-
 
 // Création paddle
 let drawSpaceShip = () => {
@@ -91,6 +109,13 @@ document.addEventListener("keyup", function(e){
     };
 });
 
+document.addEventListener("mousemove", function(e){
+    let mouseX = e.clientX;
+    if(mouseX > 0 && mouseX < canvas.width){
+        paddleX = mouseX - paddleWidth / 2;
+    };
+});
+
 // Fonction de collision 
 let collisionDetection = () => {
     for (let i = 0; i < asteroidArray.length; i++) {
@@ -99,10 +124,33 @@ let collisionDetection = () => {
             if(x > b.x && x < b.x + asteWidth && y > b.y && y < b.y + asteHeight){
                 dy = -dy;
                 b.value = 0;
+                score++;
+                if(score == asteroidArray.length){
+                    victory.classList.remove("d-none");
+                    victory.classList.add("d-flex");
+                    victory.addEventListener("click", function(){
+                        document.location.reload();
+                    });
+                    return
+                };
             };
-        }
+        };
     };
-}
+};
+
+// Fonction score 
+let drawScore = () => {
+    ctx.font = "35px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Score : ${score}`, 10, 40);
+};
+
+// Fonction nbr vie
+let drawLive = () => {
+    ctx.font = "35px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Lives : ${live}`, canvas.width-140, 40);
+};
 
 // Fonction principale
 let draw = () => {
@@ -116,20 +164,33 @@ let draw = () => {
         }
     };
     collisionDetection();
+    drawScore();
+    drawLive();
 
     // Rebond balle
     // Axe Y
     if (y + dy < ballRadius){
         dy = -dy;
     } else if (y + dy > canvas.height-ballRadius){
-        dy = -dy;
-        // if(x > paddleX && x < paddleX + paddleWidth){
-        //     dy = (-dy - 0.2);
-        // } else {
-        //     alert("GAME OVER");
-        //     document.location.reload();
-        //     clearInterval(interval);
-        // };
+        if(x > paddleX && x < paddleX + paddleWidth){
+            dy = (-dy - 0.8);
+        } else {
+            live--;
+            if(live == 0){
+                gameOver.classList.remove("d-none");
+                gameOver.classList.add("d-flex");
+                gameOver.addEventListener("click", function(){
+                    document.location.reload();
+                });
+                return
+            } else {
+                x = canvas.width/2;
+                y = canvas.height-15;
+                dx = 4;
+                dy = -6;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        };
     };
     // Axe X
     if (x + dx > canvas.width-ballRadius || x + dx < ballRadius){
@@ -138,12 +199,12 @@ let draw = () => {
 
     // Mouvement du paddle
     if (rightPress){
-        paddleX += 6;
+        paddleX += 16;
         if(paddleX + paddleWidth > canvas.width){
             paddleX = canvas.width - paddleWidth;
         };
     } else if (leftPress){
-        paddleX -= 6;
+        paddleX -= 16;
         if(paddleX < 0){
             paddleX = 0;
         };
@@ -159,17 +220,20 @@ let draw = () => {
             asteroidArray[i].x += asteroidArray[i].dx;
             if(asteroidArray[i].x < 0 || asteroidArray[i].x > canvas.width - asteWidth){
                 asteroidArray[i].dx = -asteroidArray[i].dx;
-            }
+            };
         } else {
             asteroidArray[i].x += -asteroidArray[i].dx;
             if(asteroidArray[i].x < 0 || asteroidArray[i].x > canvas.width - asteWidth){
                 asteroidArray[i].dx = -asteroidArray[i].dx;
-            }
-        }
+            };
+        };
     };
+    window.requestAnimationFrame(draw);
 };
 
-let interval = setInterval(draw, 8.5);
-// window.addEventListener("click", function(){
-//     interval = setInterval(draw, 8.5);
-// });
+
+startDiv.addEventListener("click", function(){
+    startDiv.classList.remove("d-flex");
+    startDiv.classList.add("d-none");
+    draw();
+});
